@@ -96,6 +96,20 @@ install_luaJIT() {
     printf "Building luarocks with options:"
     printf " %q" "${lua_rocks_configure_options[@]}"
     printf "\n"
+
+    cd "$install_path/bin"
+
+    echo "Creating luajit symlink (using find)..."
+    luajit_file=$(find . -name "luajit-*" -type f -executable | head -n1 | sed 's|^\./||')
+    if [ -n "$luajit_file" ]; then
+        ln -sf "$luajit_file" luajit
+        echo "SUCCESS: Created symlink luajit -> $luajit_file"
+    else
+        echo "ERROR: No luajit binary found"
+        exit 1
+    fi
+    
+    cd "$source_dir"
     ./configure "${lua_rocks_configure_options[@]}" || exit 1
     make bootstrap || exit 1
 
