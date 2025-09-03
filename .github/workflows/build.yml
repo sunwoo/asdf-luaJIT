@@ -6,8 +6,12 @@ on:
   push:
     paths-ignore:
       - "**.md"
-  schedule:
-    - cron: "0 0 * * *" # daily at midnight
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for running this workflow'
+        required: false
+        default: 'Manual test'
 
 jobs:
   linux_plugin_test:
